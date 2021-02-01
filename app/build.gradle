@@ -1,0 +1,68 @@
+plugins {
+    id 'com.android.application'
+}
+
+def buildVersionCode = Integer.parseInt(new Date().format("yyMMddHH"))
+android {
+    compileSdkVersion 30
+    buildToolsVersion "30.0.2"
+
+    defaultConfig {
+        applicationId "com.jastec.hht_demo"
+        minSdkVersion 24
+        targetSdkVersion 30
+        versionCode buildVersionCode
+        versionName "1.0"
+
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+}
+
+dependencies {
+
+    implementation 'androidx.appcompat:appcompat:1.2.0'
+    implementation 'com.google.android.material:material:1.2.1'
+    implementation 'androidx.annotation:annotation:1.1.0'
+    implementation 'androidx.constraintlayout:constraintlayout:2.0.4'
+    implementation 'androidx.lifecycle:lifecycle-livedata-ktx:2.2.0'
+    implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.2.0'
+    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
+   // implementation files('libs\\myLib_.jar')
+    //implementation fileTree(dir: 'D:\\Andriod\\hht_demo\\app\\libs', include: ['*.aar', '*.jar'], exclude: [])
+    testImplementation 'junit:junit:4.+'
+    implementation 'com.balysv:material-ripple:1.0.2'
+
+    androidTestImplementation 'androidx.test.ext:junit:1.1.2'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
+    //implementation 'com.github.Sahapap-Usadee:Test_Library:0.1.0'
+    // implementation project(path: ':TEST_ARR_TEST')
+    implementation project(path: ':TEST_AAR_3')
+
+    //implementation(name:'TEST_ARR_TEST', ext:'aar')
+
+    implementation 'com.squareup.retrofit2:adapter-rxjava2:2.9.0'
+    implementation 'com.squareup.retrofit2:converter-scalars:2.9.0'
+    implementation 'com.squareup.retrofit2:converter-gson:2.9.0'
+
+
+
+    implementation 'io.reactivex.rxjava2:rxjava:2.2.20'
+    implementation 'io.reactivex.rxjava2:rxandroid:2.1.1'
+
+
+//dialog loading
+    implementation 'com.github.d-max:spots-dialog:1.1@aar'
+
+}

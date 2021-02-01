@@ -1,0 +1,6 @@
+include ':TEST_AAR_3'
+include ':TEST_ARR_TEST'
+include ':app'
+
+
+rootProject.name = "hht_demo"

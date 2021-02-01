@@ -1,0 +1,2 @@
+configurations.maybeCreate("default")
+artifacts.add("default", file('TEST_ARR_TEST.aar'))
