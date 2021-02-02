@@ -158,33 +158,7 @@ public class LoginApiActivity extends AppCompatActivity {
 
             //------------------------------------
             TerTest user = new TerTest(txt_user, txt_password, "");
-//            compositeDisposable.add(iMyAPI.LoginUser(user)
-//                    .subscribeOn(Schedulers.io())
-//                    .observeOn(AndroidSchedulers.mainThread())
-//                    .subscribe(new Consumer<String>() {
-//                        @Override
-//                        public void accept(String s) throws Exception {
-//
-//                            Toast.makeText(LoginApiActivity.this, s, Toast.LENGTH_SHORT).show();
-//                            dialog.dismiss();
-//
-//
-//                            if (s.contains("Login successfully")) //Login successfully
-//                            {
-//                                Login_Intent(txt_user,txt_password);
-//
-//                            }
-//                        }
-//                    }, new Consumer<Throwable>() {
-//                        @Override
-//                        public void accept(Throwable throwable) throws Exception {
-//                            dialog.dismiss();
-//                            Toast.makeText(LoginApiActivity.this, throwable.getMessage(), Toast.LENGTH_SHORT).show();
-//
-//                        }
-//                    }));
-
-            compositeDisposable.add(iMyAPI.GetUSER_COUNT(ter_TEST)
+            compositeDisposable.add(iMyAPI.LoginUser(user)
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(new Consumer<String>() {
@@ -195,7 +169,11 @@ public class LoginApiActivity extends AppCompatActivity {
                             dialog.dismiss();
 
 
+                            if (s.contains("Login successfully")) //Login successfully
+                            {
+                                Login_Intent(txt_user,txt_password);
 
+                            }
                         }
                     }, new Consumer<Throwable>() {
                         @Override
@@ -205,6 +183,28 @@ public class LoginApiActivity extends AppCompatActivity {
 
                         }
                     }));
+
+//            compositeDisposable.add(iMyAPI.GetUSER_COUNT(ter_TEST)
+//                    .subscribeOn(Schedulers.io())
+//                    .observeOn(AndroidSchedulers.mainThread())
+//                    .subscribe(new Consumer<String>() {
+//                        @Override
+//                        public void accept(String s) throws Exception {
+//
+//                            Toast.makeText(LoginApiActivity.this, s, Toast.LENGTH_SHORT).show();
+//                            dialog.dismiss();
+//
+//
+//
+//                        }
+//                    }, new Consumer<Throwable>() {
+//                        @Override
+//                        public void accept(Throwable throwable) throws Exception {
+//                            dialog.dismiss();
+//                            Toast.makeText(LoginApiActivity.this, throwable.getMessage(), Toast.LENGTH_SHORT).show();
+//
+//                        }
+//                    }));
             mLastClickTime = SystemClock.elapsedRealtime();
 
         }
