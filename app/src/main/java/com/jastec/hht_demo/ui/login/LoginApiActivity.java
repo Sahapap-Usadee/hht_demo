@@ -31,6 +31,9 @@ import com.jastec.hht_demo.model.TerTest;
 import com.jastec.hht_demo.remote.IMyAPI;
 import com.jastec.hht_demo.remote.RetrofitClient;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import dmax.dialog.SpotsDialog;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
@@ -53,7 +56,7 @@ public class LoginApiActivity extends AppCompatActivity {
     final int MIN_PASSWORD_LENGTH = 2;
     private final static int LOADING_DURATION = 2000;
     private long mLastClickTime = 0;
-
+    List<TerTest> ter_TEST = new ArrayList<>();
     private IMyAPI iMyAPI;
     CompositeDisposable compositeDisposable = new CompositeDisposable();
 
@@ -62,6 +65,9 @@ public class LoginApiActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_login_api);
+       ter_TEST.add(new TerTest("aasxz","baa","caa"));
+        ter_TEST.add(new TerTest("qq","aab","aac"));
+        ter_TEST.add(new TerTest("qq","aab","aac"));
 
 
         viewInitializations();
@@ -163,7 +169,7 @@ public class LoginApiActivity extends AppCompatActivity {
                             if (s.contains("Login successfully")) //Login successfully
                             {
                                 Login_Intent(txt_user,txt_password);
-//
+
                             }
                         }
                     }, new Consumer<Throwable>() {
@@ -174,6 +180,28 @@ public class LoginApiActivity extends AppCompatActivity {
 
                         }
                     }));
+
+//            compositeDisposable.add(iMyAPI.GetUSER_COUNT(ter_TEST)
+//                    .subscribeOn(Schedulers.io())
+//                    .observeOn(AndroidSchedulers.mainThread())
+//                    .subscribe(new Consumer<String>() {
+//                        @Override
+//                        public void accept(String s) throws Exception {
+//
+//                            Toast.makeText(LoginApiActivity.this, s, Toast.LENGTH_SHORT).show();
+//                            dialog.dismiss();
+//
+//
+//
+//                        }
+//                    }, new Consumer<Throwable>() {
+//                        @Override
+//                        public void accept(Throwable throwable) throws Exception {
+//                            dialog.dismiss();
+//                            Toast.makeText(LoginApiActivity.this, throwable.getMessage(), Toast.LENGTH_SHORT).show();
+//
+//                        }
+//                    }));
             mLastClickTime = SystemClock.elapsedRealtime();
 
         }

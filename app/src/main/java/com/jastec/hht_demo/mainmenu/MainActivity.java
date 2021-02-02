@@ -29,6 +29,7 @@ import com.jastec.hht_demo.adapter.MainMenuAdapter;
 import com.jastec.hht_demo.fragment.ProgramFragment;
 import com.jastec.hht_demo.model.MenuType;
 import com.jastec.hht_demo.model.MsPg;
+import com.jastec.hht_demo.model.TerTest;
 import com.jastec.hht_demo.remote.IMyAPI;
 import com.jastec.hht_demo.remote.RetrofitClient;
 import com.jastec.hht_demo.ui.login.LoginApiActivity;

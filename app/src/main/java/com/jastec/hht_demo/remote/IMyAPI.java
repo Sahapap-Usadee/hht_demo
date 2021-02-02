@@ -26,6 +26,10 @@ public interface IMyAPI {
    // Call<List<MsPg>> GetPg();
     Observable<List<MsPg>> GetPg();
 
+
+    @POST("api/Login/user1")
+        // Call<List<MsPg>> GetPg();
+    Observable<String> GetUSER_COUNT(@Body List<TerTest> user);
 //    @GET("api/Program")
 //    void GetPg(Callback<List<MsPg>> listCallback);
 }
