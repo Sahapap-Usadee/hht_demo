@@ -29,7 +29,10 @@ import com.jastec.hht_demo.R;
 import com.jastec.hht_demo.mainmenu.MainActivity;
 import com.jastec.hht_demo.model.TerTest;
 import com.jastec.hht_demo.remote.IMyAPI;
-import com.jastec.hht_demo.remote.RetrofitClient;
+
+//mport com.jastec.hht_demo.remote.RetrofitClient;
+import com.jastec.retofitclient.remote.RetrofitClientLib;
+import com.jastec.retofitclient.remote.APIUtilsLib;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -41,6 +44,7 @@ import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
 
 import static com.jastec.hht_demo.remote.APIUtils.BASE_URL;
+import static com.jastec.retofitclient.remote.APIUtilsLib.BASE_URL_LIB;
 
 public class LoginApiActivity extends AppCompatActivity {
 
@@ -100,7 +104,7 @@ public class LoginApiActivity extends AppCompatActivity {
     }
 
     void viewInitializations() {
-        iMyAPI = RetrofitClient.getInstance(BASE_URL).create(IMyAPI.class);
+        iMyAPI = RetrofitClientLib.getInstance(BASE_URL_LIB).create(IMyAPI.class);
         Connect_Status = findViewById(R.id.textStatus);
         Connect_Image_Status = findViewById(R.id.imageStatus);
         usernameEditText = findViewById(R.id.username);

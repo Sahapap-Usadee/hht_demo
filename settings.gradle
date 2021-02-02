@@ -1,5 +1,5 @@
+include ':RetrofitLib'
 include ':TEST_AAR_3'
-include ':TEST_ARR_TEST'
 include ':app'
 
 
