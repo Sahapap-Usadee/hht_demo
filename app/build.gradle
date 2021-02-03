@@ -50,6 +50,7 @@ dependencies {
     // implementation project(path: ':TEST_ARR_TEST')
     implementation project(path: ':TEST_AAR_3')
     implementation project(path: ':RetrofitLib')
+    implementation project(path: ':StockLib')
     //implementation(name:'TEST_ARR_TEST', ext:'aar')
 
     implementation 'com.squareup.retrofit2:adapter-rxjava2:2.9.0'

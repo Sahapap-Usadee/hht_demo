@@ -261,9 +261,9 @@ public class MainActivity extends AppCompatActivity {
         switch (itemId) {
             // Bottom Navigation -------------------------------------------------------------------
 
+
             case 401:
                 Toast.makeText(getApplicationContext(), itemText, Toast.LENGTH_SHORT).show();
-
                 Intent intent = new Intent(MainActivity.this, LoginApiActivity.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(intent);
@@ -274,10 +274,12 @@ public class MainActivity extends AppCompatActivity {
                 fm.beginTransaction().hide(active).show(ProgramFragment).commit();
                 active = ProgramFragment;
                 break;
-            default:
 
+            default:
                 fm.beginTransaction().hide(active).hide(ProgramFragment).commit();
                 active = ProgramFragment;
+
+
                 // Buttons -----------------------------------------------------------------------------
 
         }
