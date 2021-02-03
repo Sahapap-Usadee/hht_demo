@@ -27,6 +27,7 @@ import com.jastec.hht_demo.Connection.NetworkService;
 import com.jastec.hht_demo.R;
 
 import com.jastec.hht_demo.mainmenu.MainActivity;
+import com.jastec.hht_demo.model.MsPg;
 import com.jastec.hht_demo.model.TerTest;
 import com.jastec.hht_demo.remote.IMyAPI;
 
@@ -38,6 +39,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import dmax.dialog.SpotsDialog;
+import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.functions.Consumer;
@@ -56,7 +58,7 @@ public class LoginApiActivity extends AppCompatActivity {
     private EditText usernameEditText, passwordEditText;
     private Button loginButton;
     private SharedPreferences preferences;
-    ProgressBar loadingProgressBar;
+
     final int MIN_PASSWORD_LENGTH = 2;
     private final static int LOADING_DURATION = 2000;
     private long mLastClickTime = 0;
@@ -69,54 +71,54 @@ public class LoginApiActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_login_api);
-        for (int i=0;i<6;i++)
-        {
-
-            ter_TEST.add(new TerTest("aasxz","baa","caa"));
-        }
-
-
-
+//        for (int i=0;i<6;i++)
+//        {
+//
+//            ter_TEST.add(new TerTest("aasxz","baa","caa"));
+//        }
         viewInitializations();
+        loginButtonClick();
 
-        loginButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(NetworkService.isOnline(getApplicationContext())) {
-                performSignUp(v);
-                  }
-                else
-                {
-
-                    Toast.makeText(LoginApiActivity.this, "Network is available : FALSE ", Toast.LENGTH_SHORT).show();
-                }
-            }
-        });
 
         // isNetworkAvailable(LoginApiActivity.this);
 
     }
 
+
+    private void loginButtonClick() {
+        loginButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (NetworkService.isOnline(getApplicationContext())) {
+                    performSignUp(v);
+                } else {
+                    Toast.makeText(LoginApiActivity.this, "Network is available : FALSE ", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+    }
+
+
     @Override
     protected void onStop() {
-        compositeDisposable.clear();
+        //  compositeDisposable.clear();
         super.onStop();
     }
 
     void viewInitializations() {
         iMyAPI = RetrofitClientLib.getInstance(BASE_URL_LIB).create(IMyAPI.class);
+
         Connect_Status = findViewById(R.id.textStatus);
         Connect_Image_Status = findViewById(R.id.imageStatus);
         usernameEditText = findViewById(R.id.username);
         passwordEditText = findViewById(R.id.password);
         loginButton = findViewById(R.id.login);
-        loadingProgressBar = findViewById(R.id.loading);
+
         loginButton.setEnabled(true);
         final TextView PG_Version_cd = findViewById(R.id.version_cd);
         PG_Version_cd.setText("Version :" + BuildConfig.VERSION_CODE);
         preferences = getSharedPreferences("login_pref", Context.MODE_PRIVATE);
-        if (preferences.contains("isUserLogin"))
-        {
+        if (preferences.contains("isUserLogin")) {
             String uname = preferences.getString("username", "username");
             String upass = preferences.getString("password", "password");
             usernameEditText.setText(uname);
@@ -129,12 +131,9 @@ public class LoginApiActivity extends AppCompatActivity {
         Intent serviceIntent = new Intent(this, NetworkService.class);
         startService(serviceIntent);
 
-        if(NetworkService.isOnline(getApplicationContext()))
-        {
-             Set_ON();
-        }
-        else
-        {
+        if (NetworkService.isOnline(getApplicationContext())) {
+            Set_ON();
+        } else {
             Set_OFF();
             Toast.makeText(LoginApiActivity.this, "Network is available : FALSE ", Toast.LENGTH_SHORT).show();
 
@@ -152,12 +151,8 @@ public class LoginApiActivity extends AppCompatActivity {
             dialog.show();
 
 
-
-
             String txt_user = usernameEditText.getText().toString();
             String txt_password = passwordEditText.getText().toString();
-
-
 
 
             //------------------------------------
@@ -175,8 +170,8 @@ public class LoginApiActivity extends AppCompatActivity {
 
                             if (s.contains("Login successfully")) //Login successfully
                             {
-                                Login_Intent(txt_user,txt_password);
-
+                                Login_Intent(txt_user, txt_password);
+                                compositeDisposable.clear();
                             }
                         }
                     }, new Consumer<Throwable>() {
@@ -214,7 +209,7 @@ public class LoginApiActivity extends AppCompatActivity {
         }
     }
 
-private void Login_Intent(String In_user, String In_password){
+    private void Login_Intent(String In_user, String In_password) {
         SharedPreferences preferences = getSharedPreferences("login_pref", Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = preferences.edit();
         editor.putString("username", In_user);
@@ -222,9 +217,10 @@ private void Login_Intent(String In_user, String In_password){
 
         editor.putBoolean("isUserLogin", true);
         editor.commit();
-        loadingProgressBar.setVisibility(View.GONE);
+
         Intent intent = new Intent(LoginApiActivity.this, MainActivity.class);
         intent.putExtra(EXTRA_MESSAGE, In_user);
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(intent);
     }
 
@@ -256,14 +252,10 @@ private void Login_Intent(String In_user, String In_password){
     public BroadcastReceiver MyReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            if (intent.getAction().equals(BroadcastStringForAction))
-            {
-                if(intent.getStringExtra("online_status").equals("true"))
-                {
+            if (intent.getAction().equals(BroadcastStringForAction)) {
+                if (intent.getStringExtra("online_status").equals("true")) {
                     Set_ON();
-                }
-                else
-                {
+                } else {
                     Set_OFF();
                 }
             }
@@ -303,10 +295,11 @@ private void Login_Intent(String In_user, String In_password){
         Connect_Status.setText("Network Connection : FALSE");
         Connect_Image_Status.setColorFilter(ContextCompat.getColor(this, R.color.red_A400), android.graphics.PorterDuff.Mode.MULTIPLY);
     }
+
     @Override
-    protected void onRestart(){
+    protected void onRestart() {
         super.onRestart();
-        registerReceiver(MyReceiver,mIntentFilter);
+        registerReceiver(MyReceiver, mIntentFilter);
     }
 
     @Override
@@ -318,7 +311,7 @@ private void Login_Intent(String In_user, String In_password){
     @Override
     protected void onResume() {
         super.onResume();
-        registerReceiver(MyReceiver,mIntentFilter);
+        registerReceiver(MyReceiver, mIntentFilter);
     }
 
 

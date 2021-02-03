@@ -71,6 +71,7 @@ public class MainActivity extends AppCompatActivity {
     private Toolbar toolbar;
     List<MsPg> Program_ALl;
     IMyAPI iMyAPI;
+    Observable<List<MsPg>> Program_Name_API;
 
     CompositeDisposable compositeDisposable = new CompositeDisposable();
     List<MainMenuAdapter.ListItem> items = new ArrayList<>();
@@ -82,17 +83,20 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        Intent intent = getIntent();
-        message = intent.getStringExtra(EXTRA_MESSAGE);
-        iMyAPI = RetrofitClient.getInstance(BASE_URL).create(IMyAPI.class);
-        Observable<List<MsPg>> Program_Name_API = iMyAPI.GetPg();
-
-
+        initStart();
         initToolbar();
         initNavigationHead();
-       // initNavigationMenu();
+        // initNavigationMenu();
+        initNavigationMenu();
+        //  initNavigationMenu();
+        //  initComponent();
+        //   MenuItem Menu_home = menuNav.findItem(R.id.nav_home);
+        // Set_MenuCilck(Menu_home);
+    }
+
+    private void initNavigationMenu() {
         recycler = (RecyclerView) findViewById(R.id.Program_recyclerView);
-        adapter = new MainMenuAdapter(this,items, new MainMenuAdapter.OnItemClickListener() {
+        adapter = new MainMenuAdapter(this, items, new MainMenuAdapter.OnItemClickListener() {
 
             @Override
             public void onItemClick(View view, int itemId, String itemText) {
@@ -110,7 +114,7 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void accept(List<MsPg> msPgs) throws Exception {
                         Program_ALl = msPgs;
-                        initNavigationMenu();
+                        initNavigationMenuData();
                         compositeDisposable.dispose();
                     }
 
@@ -122,11 +126,14 @@ public class MainActivity extends AppCompatActivity {
                         //    compositeDisposable.dispose();
                     }
                 }));
-        //  initNavigationMenu();
+    }
 
-        //  initComponent();
-        //   MenuItem Menu_home = menuNav.findItem(R.id.nav_home);
-        // Set_MenuCilck(Menu_home);
+    private void initStart() {
+
+        Intent intent = getIntent();
+        message = intent.getStringExtra(EXTRA_MESSAGE);
+        iMyAPI = RetrofitClient.getInstance(BASE_URL).create(IMyAPI.class);
+        Program_Name_API = iMyAPI.GetPg();
     }
 
     private void initToolbar() {
@@ -223,7 +230,7 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    private void initNavigationMenu() {
+    private void initNavigationMenuData() {
 
         recycler = (RecyclerView) findViewById(R.id.Program_recyclerView);
         adapter = new MainMenuAdapter(this, generateMenuItems(Program_ALl), new MainMenuAdapter.OnItemClickListener() {
