@@ -4,12 +4,15 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.PersistableBundle;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
@@ -18,21 +21,25 @@ import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.navigation.NavigationView;
+import com.jastec.dialogalert.KAlertDialog;
 import com.jastec.hht_demo.R;
 import com.jastec.hht_demo.adapter.ExpandableRecyclerAdapter;
 import com.jastec.hht_demo.adapter.MainMenuAdapter;
-
+import com.jastec.hht_demo.fragment.BlankFragment;
 import com.jastec.hht_demo.fragment.ProgramFragment;
+import com.jastec.hht_demo.fragment.ProgramStockFragment;
 import com.jastec.hht_demo.model.MenuType;
 import com.jastec.hht_demo.model.MsPg;
 import com.jastec.hht_demo.model.TerTest;
 import com.jastec.hht_demo.remote.IMyAPI;
 import com.jastec.hht_demo.remote.RetrofitClient;
 import com.jastec.hht_demo.ui.login.LoginApiActivity;
+import com.jastec.stock.Activity.StockActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -49,7 +56,9 @@ import static com.jastec.hht_demo.remote.APIUtils.BASE_URL;
 //import com.jastec.test_dependency.R.xml;
 
 public class MainActivity extends AppCompatActivity {
-    public static final String EXTRA_MESSAGE = "com.jastec.hht_demo.ui.login.MESSAGE";
+    public static final String EXTRA_USER_ID = "com.jastec.hht_demo.ui.login.USER_ID";
+    public static final String EXTRA_PROGRAM_ALL = "com.jastec.hht_demo.ui.login.EXTRA_PROGRAM_ALL";
+
     private ActionBar actionBar;
     private String message;
     private RecyclerView recycler;
@@ -64,76 +73,156 @@ public class MainActivity extends AppCompatActivity {
 
     private long mLastClickTime = 0;
     private int Check_NavigationMenu = 0;
-    final Fragment ProgramFragment = new ProgramFragment();
-    final FragmentManager fm = getSupportFragmentManager();
+     Fragment ProgramFragment = new ProgramFragment();
+     Fragment ProgramStockFragment = new ProgramStockFragment();
+    Fragment BlankFragment = new BlankFragment();
+     FragmentManager fm = getSupportFragmentManager();
 
-    Fragment active = ProgramFragment;
+    Fragment active ;
     private Toolbar toolbar;
     List<MsPg> Program_ALl;
-    IMyAPI iMyAPI;
-    Observable<List<MsPg>> Program_Name_API;
+//    IMyAPI iMyAPI;
+//    Observable<List<MsPg>> Program_Name_API;
 
     CompositeDisposable compositeDisposable = new CompositeDisposable();
     List<MainMenuAdapter.ListItem> items = new ArrayList<>();
     private int Menu_Home_Id = 1;
     private String Menu_Home_Title = "Home";
-
+    private static boolean  DpisrunOnce=false;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+
+        super.onCreate(null);
+
         setContentView(R.layout.activity_main);
 
+//        if (getSupportFragmentManager().findFragmentById(R.id.content_main) != null) {
+//            fm.beginTransaction().replace(R.id.content_main,BlankFragment).commit();
+//
+//
+//        } //to do add fragment
+        if(DpisrunOnce)
+        {
+//            Intent intent= new Intent(com.jastec.hht_demo.mainmenu.MainActivity.this,com.jastec.hht_demo.mainmenu.MainActivity.class);
+//            finish();
+//            startActivity(intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT));
+
+
+        }
+        else {
+
+            DpisrunOnce =true;
+        }
+        initFragment();
+
+        Toast.makeText(MainActivity.this, "create", Toast.LENGTH_SHORT).show();
         initStart();
         initToolbar();
         initNavigationHead();
         // initNavigationMenu();
-        initNavigationMenu();
+        initNavigationMenuData();
+        // initNavigationMenu();
         //  initNavigationMenu();
         //  initComponent();
         //   MenuItem Menu_home = menuNav.findItem(R.id.nav_home);
         // Set_MenuCilck(Menu_home);
+
     }
 
-    private void initNavigationMenu() {
-        recycler = (RecyclerView) findViewById(R.id.Program_recyclerView);
-        adapter = new MainMenuAdapter(this, items, new MainMenuAdapter.OnItemClickListener() {
-
-            @Override
-            public void onItemClick(View view, int itemId, String itemText) {
-
-            }
-        });
-        recycler.setLayoutManager(new LinearLayoutManager(this));
-
-        recycler.setAdapter(adapter);
-        compositeDisposable.add(Program_Name_API
-                .subscribeOn(Schedulers.io())
-
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Consumer<List<MsPg>>() {
-                    @Override
-                    public void accept(List<MsPg> msPgs) throws Exception {
-                        Program_ALl = msPgs;
-                        initNavigationMenuData();
-                        compositeDisposable.dispose();
-                    }
-
-                }, new Consumer<Throwable>() {
-                    @Override
-                    public void accept(Throwable throwable) throws Exception {
-                        // dialog.dismiss();
-                        Toast.makeText(MainActivity.this, throwable.getMessage(), Toast.LENGTH_SHORT).show();
-                        //    compositeDisposable.dispose();
-                    }
-                }));
+    @Override
+    public void onSaveInstanceState(@NonNull Bundle outState, @NonNull PersistableBundle outPersistentState) {
+    //    super.onSaveInstanceState(outState, outPersistentState);
     }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+//        fm.beginTransaction().hide(BlankFragment).commit();
+//        fm.beginTransaction().hide(ProgramStockFragment).commit();
+//        fm.beginTransaction().hide(ProgramFragment).commit();
+      //  Toast.makeText(MainActivity.this, "destroy", Toast.LENGTH_SHORT).show();
+//        FragmentTransaction trans = fm.beginTransaction();
+//        trans.remove(myFrag);
+//        trans.commit();
+//        fm.popBackStack();
+      //  getSupportFragmentManager().beginTransaction().remove(fm.).commitAllowingStateLoss();
+
+    }
+
+    @Override
+    protected void onRestart() {
+   //     this.onCreate(null);
+        super.onRestart();
+
+        Toast.makeText(MainActivity.this, "restart", Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        Toast.makeText(MainActivity.this, "pause", Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        Toast.makeText(MainActivity.this, "resume", Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        Toast.makeText(MainActivity.this, "stop", Toast.LENGTH_SHORT).show();
+
+//        finish();
+//        startActivity(getIntent());
+    }
+
+//    private void initNavigationMenu() {
+//        recycler = (RecyclerView) findViewById(R.id.Program_recyclerView);
+//        adapter = new MainMenuAdapter(this, items, new MainMenuAdapter.OnItemClickListener() {
+//
+//            @Override
+//            public void onItemClick(View view, int itemId, String itemText) {
+//
+//            }
+//        });
+//        recycler.setLayoutManager(new LinearLayoutManager(this));
+//
+//        recycler.setAdapter(adapter);
+//        compositeDisposable.add(
+//                Program_Name_API
+//                        .subscribeOn(Schedulers.io())
+//
+//                        .observeOn(AndroidSchedulers.mainThread())
+//                        .subscribe(new Consumer<List<MsPg>>() {
+//                            @Override
+//                            public void accept(List<MsPg> msPgs) throws Exception {
+//                                Program_ALl = msPgs;
+//                                initNavigationMenuData();
+//
+//                                // compositeDisposable.dispose();
+//                            }
+//
+//                        }, new Consumer<Throwable>() {
+//                            @Override
+//                            public void accept(Throwable throwable) throws Exception {
+//                                // dialog.dismiss();
+//                                Toast.makeText(MainActivity.this, throwable.getMessage(), Toast.LENGTH_SHORT).show();
+//                                Log.d("error failure", throwable.getMessage());
+//                                //    compositeDisposable.dispose();
+//                            }
+//                        }));
+//    }
 
     private void initStart() {
 
         Intent intent = getIntent();
-        message = intent.getStringExtra(EXTRA_MESSAGE);
-        iMyAPI = RetrofitClient.getInstance(BASE_URL).create(IMyAPI.class);
-        Program_Name_API = iMyAPI.GetPg();
+        message = intent.getStringExtra(EXTRA_USER_ID);
+        Bundle bundle = getIntent().getExtras();
+        Program_ALl = bundle.getParcelableArrayList(EXTRA_PROGRAM_ALL);
+//        iMyAPI = RetrofitClient.getInstance(BASE_URL).create(IMyAPI.class);
+//        Program_Name_API = iMyAPI.GetPg();
     }
 
     private void initToolbar() {
@@ -245,18 +334,42 @@ public class MainActivity extends AppCompatActivity {
         recycler.setLayoutManager(new LinearLayoutManager(this));
         recycler.setNestedScrollingEnabled(false);
         recycler.setAdapter(adapter);
+      //  initFragment();
 
-        fm.beginTransaction().add(R.id.content_main, ProgramFragment, "1").hide(ProgramFragment).commit();
         onMenuItemSelected(Menu_Home_Id, Menu_Home_Title);
         //  Set_MenuCilck(Menu_home);
         drawer.openDrawer(GravityCompat.START);
 
     }
 
+    private void initFragment() {
+        active = BlankFragment;
+
+        fm.beginTransaction().add(R.id.content_main, ProgramFragment, "1").hide(ProgramFragment).commit();
+        fm.beginTransaction().add(R.id.content_main, ProgramStockFragment, "2").hide(ProgramStockFragment).commit();
+        fm.beginTransaction().add(R.id.content_main, BlankFragment, "3").commit();
+    }
+
     private void onMenuItemSelected(int itemId, String itemText) {
+        Bundle bundle = new Bundle();
+//        bundle.putString("formName","stockIn");
+//        Intent intentBundle =new Intent(MainActivity.this, StockActivity.class);
 
         if (Check_NavigationMenu == itemId) {
             return;
+        }
+        if (itemText.equals("Stock")) {
+            fm.beginTransaction().hide(active).show(ProgramStockFragment).commit();
+
+            active = ProgramStockFragment;
+//            Toast.makeText(getApplicationContext(), itemText, Toast.LENGTH_SHORT).show();
+//            intentBundle.putExtras(bundle);
+//            startActivity(intentBundle);
+            Check_NavigationMenu = itemId;
+            actionBar.setTitle(itemText);
+            drawer.closeDrawers();
+            return;
+
         }
         switch (itemId) {
             // Bottom Navigation -------------------------------------------------------------------
@@ -271,13 +384,18 @@ public class MainActivity extends AppCompatActivity {
 
                 return;
             case 205:
+
                 fm.beginTransaction().hide(active).show(ProgramFragment).commit();
+
                 active = ProgramFragment;
                 break;
 
             default:
-                fm.beginTransaction().hide(active).hide(ProgramFragment).commit();
-                active = ProgramFragment;
+
+                fm.beginTransaction().hide(active).show(BlankFragment).commit();
+                fm.beginTransaction().hide(ProgramStockFragment).commit();
+                fm.beginTransaction().hide(ProgramFragment).commit();
+                active = BlankFragment;
 
 
                 // Buttons -----------------------------------------------------------------------------
@@ -333,7 +451,7 @@ public class MainActivity extends AppCompatActivity {
         items.add(new MainMenuAdapter.ListItem(100, "Program Master", R.drawable.ic_whatshot, MenuType.HEADER));
         if (program_ALl != null) {
             for (int i = 0; i < Program_ALl.size(); i++) {
-                items.add(new MainMenuAdapter.ListItem(101 + i, Program_ALl.get(i).getPgName().trim(), -2, MenuType.SUB_HEADER));
+                items.add(new MainMenuAdapter.ListItem(101 + i, Program_ALl.get(i).getPgId().trim(), -2, MenuType.SUB_HEADER));
             }
 //                            //System.out.println(Program_ALl.get(i));
 //                          //  Toast.makeText(getActivity(), Program_ALl.get(i).getPgId(), Toast.LENGTH_SHORT).show();
@@ -416,28 +534,36 @@ public class MainActivity extends AppCompatActivity {
 
 
     protected void exitByBackKey() {
-
         //AlertDialog alertbox =
-        new AlertDialog.Builder(this)
-                .setMessage("Do you want to exit application?")
-                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+//        new AlertDialog.Builder(this)
+//                .setMessage("Do you want to exit application?")
+//                .setIcon(R.drawable.ic_help)
+//
+//                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+//
+//                    // do something when the button is clicked
+//                    public void onClick(DialogInterface arg0, int arg1) {
+//                        finishAffinity();
+//                        //close();
+//                    }
+//                })
+//                .setNegativeButton("No", new DialogInterface.OnClickListener() {
+//                    // do something when the button is clicked
+//                    public void onClick(DialogInterface arg0, int arg1) {
+//                    }
+//                })
+//                .show();
 
-                    // do something when the button is clicked
-                    public void onClick(DialogInterface arg0, int arg1) {
-                        finishAffinity();
 
-                        //close();
+        new KAlertDialog(this, KAlertDialog.WARNING_TYPE)
 
+                .setTitleText("Exit Application?")
+                .setContentText("Do you want to exit application!")
+                .setCancelText("No")
+                .setConfirmText("Yes")
+                .showCancelButton(true)
+                .setConfirmClickListener(sDialog ->  finishAffinity())
 
-                    }
-                })
-                .setNegativeButton("No", new DialogInterface.OnClickListener() {
-
-                    // do something when the button is clicked
-                    public void onClick(DialogInterface arg0, int arg1) {
-                    }
-                })
                 .show();
-
     }
 }

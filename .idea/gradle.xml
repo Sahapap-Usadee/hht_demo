@@ -11,7 +11,9 @@
         <option name="modules">
           <set>
             <option value="$PROJECT_DIR$" />
+            <option value="$PROJECT_DIR$/DialogAlert" />
             <option value="$PROJECT_DIR$/RetrofitLib" />
+            <option value="$PROJECT_DIR$/StockFr" />
             <option value="$PROJECT_DIR$/TEST_AAR_3" />
             <option value="$PROJECT_DIR$/app" />
           </set>

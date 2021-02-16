@@ -122,7 +122,10 @@
                         <View
                             android:layout_width="0dp"
                             android:layout_height="@dimen/spacing_mlarge" />
+                        <androidx.coordinatorlayout.widget.CoordinatorLayout
 
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent">
                         <Button
                             android:id="@+id/login"
                             android:layout_width="match_parent"
@@ -135,6 +138,7 @@
                             android:textAllCaps="false"
                             android:textColor="@android:color/white"
                             android:textStyle="bold" />
+                        </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
 
                     </LinearLayout>

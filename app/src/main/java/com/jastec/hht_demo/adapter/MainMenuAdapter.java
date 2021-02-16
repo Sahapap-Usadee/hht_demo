@@ -14,9 +14,7 @@ import com.jastec.hht_demo.model.MenuType;
 
 import java.util.List;
 
-/**
- * Class handle menu at MainMenu.java or First Page
- */
+@SuppressWarnings("unchecked")
 public class MainMenuAdapter extends ExpandableRecyclerAdapter<MainMenuAdapter.ListItem> {
 
     private Context context;
@@ -56,9 +54,7 @@ public class MainMenuAdapter extends ExpandableRecyclerAdapter<MainMenuAdapter.L
         }
     }
 
-    /**
-     * ClassView for menu with icon and text
-     */
+
     public class PlainViewHolder extends ExpandableRecyclerAdapter.ViewHolder {
         View view;
         TextView name;
@@ -83,9 +79,7 @@ public class MainMenuAdapter extends ExpandableRecyclerAdapter<MainMenuAdapter.L
         }
     }
 
-    /**
-     * ClassView for menu with icon, text and expandable feature
-     */
+
     public class HeaderViewHolder extends ExpandableRecyclerAdapter.HeaderViewHolder {
         TextView name;
         ImageView icon;
@@ -106,9 +100,7 @@ public class MainMenuAdapter extends ExpandableRecyclerAdapter<MainMenuAdapter.L
         }
     }
 
-    /**
-     * ClassView for menu with text and sub header from HeaderViewHolder
-     */
+
     public class SubHeaderViewHolder extends ExpandableRecyclerAdapter.ViewHolder {
         View view;
         TextView name;
@@ -133,9 +125,7 @@ public class MainMenuAdapter extends ExpandableRecyclerAdapter<MainMenuAdapter.L
         }
     }
 
-    /**
-     * ClassView for menu divider line
-     */
+
     public class DividerViewHolder extends ExpandableRecyclerAdapter.ViewHolder {
         TextView name;
 

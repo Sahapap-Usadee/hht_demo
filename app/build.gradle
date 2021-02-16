@@ -39,7 +39,10 @@ dependencies {
     implementation 'androidx.lifecycle:lifecycle-livedata-ktx:2.2.0'
     implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.2.0'
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
-   // implementation files('libs\\myLib_.jar')
+
+
+
+    // implementation files('libs\\myLib_.jar')
     //implementation fileTree(dir: 'D:\\Andriod\\hht_demo\\app\\libs', include: ['*.aar', '*.jar'], exclude: [])
     testImplementation 'junit:junit:4.+'
     implementation 'com.balysv:material-ripple:1.0.2'
@@ -50,6 +53,8 @@ dependencies {
     // implementation project(path: ':TEST_ARR_TEST')
     implementation project(path: ':TEST_AAR_3')
     implementation project(path: ':RetrofitLib')
+    implementation project(path: ':StockFr')
+    implementation project(path: ':DialogAlert')
 
     //implementation(name:'TEST_ARR_TEST', ext:'aar')
 
@@ -64,6 +69,9 @@ dependencies {
 
 
 //dialog loading
-    implementation 'com.github.d-max:spots-dialog:1.1@aar'
+   // implementation 'com.github.d-max:spots-dialog:1.1@aar'
+
+//log
+    implementation 'com.squareup.okhttp3:logging-interceptor:4.2.1'
 
 }

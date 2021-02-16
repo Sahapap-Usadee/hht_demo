@@ -2,21 +2,19 @@ package com.jastec.hht_demo.fragment;
 
 import android.content.Intent;
 import android.os.Bundle;
-
-import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.os.SystemClock;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.jastec.hht_demo.R;
 import com.jastec.hht_demo.adapter.AdapterMenuleft;
 import com.jastec.hht_demo.data.DataGenerator;
-import com.jastec.hht_demo.mainmenu.MainActivity;
 import com.jastec.hht_demo.model.MsPg;
 import com.jastec.hht_demo.model.PgMenu;
 import com.jastec.hht_demo.remote.IMyAPI;
@@ -25,27 +23,21 @@ import com.jastec.stock.Activity.StockActivity;
 import com.jastec.test_dependency.TestActivity;
 
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.annotations.NonNull;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.functions.Consumer;
-import io.reactivex.observers.ResourceObserver;
 import io.reactivex.schedulers.Schedulers;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 import static com.jastec.hht_demo.remote.APIUtils.BASE_URL;
 
 /**
  * A simple {@link Fragment} subclass.
- * Use the {@link ProgramFragment#newInstance} factory method to
+ * Use the {@link ProgramStockFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class ProgramFragment extends Fragment {
+public class ProgramStockFragment extends Fragment {
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -62,7 +54,7 @@ public class ProgramFragment extends Fragment {
     IMyAPI iMyAPI;
     CompositeDisposable compositeDisposable = new CompositeDisposable();
 
-    public ProgramFragment() {
+    public ProgramStockFragment() {
         // Required empty public constructor
     }
 
@@ -75,8 +67,8 @@ public class ProgramFragment extends Fragment {
      * @return A new instance of fragment ProgramFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static ProgramFragment newInstance(String param1, String param2) {
-        ProgramFragment fragment = new ProgramFragment();
+    public static ProgramStockFragment newInstance(String param1, String param2) {
+        ProgramStockFragment fragment = new ProgramStockFragment();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
@@ -200,7 +192,7 @@ public class ProgramFragment extends Fragment {
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
         //set data and list adapter
-        adapter = new AdapterMenuleft(getActivity(), DataGenerator.getPgMenuData(getActivity(), pg_all));
+        adapter = new AdapterMenuleft(getActivity(), DataGenerator.getPgMenuDataStock(getActivity(), pg_all));
         recyclerView.setAdapter(adapter);
         adapter.setOnItemClickListener(new AdapterMenuleft.OnItemClickListener() {
             @Override
@@ -209,10 +201,15 @@ public class ProgramFragment extends Fragment {
                     return;
                 }
                 mLastClickTime = SystemClock.elapsedRealtime();
-
                 Toast.makeText(getActivity(), obj.pg_name, Toast.LENGTH_SHORT).show();
-                Intent intent = new Intent(getActivity(), TestActivity.class);
-                startActivity(intent);
+                Bundle bundle = new Bundle();
+                bundle.putString("formName", obj.pg_name.trim());
+                Intent intentBundle = new Intent(getActivity(), StockActivity.class);
+                intentBundle.putExtras(bundle);
+                startActivity(intentBundle);
+//                Toast.makeText(getActivity(), obj.pg_name, Toast.LENGTH_SHORT).show();
+//                Intent intent = new Intent(getActivity(), TestActivity.class);
+//                startActivity(intent);
             }
         });
     }
