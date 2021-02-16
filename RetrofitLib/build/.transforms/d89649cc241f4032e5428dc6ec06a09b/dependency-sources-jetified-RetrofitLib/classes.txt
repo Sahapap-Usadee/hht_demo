@@ -1,0 +1,3 @@
+com/jastec/retofitclient/BuildConfig.class
+com/jastec/retofitclient/remote/APIUtilsLib.class
+com/jastec/retofitclient/remote/RetrofitClientLib.class

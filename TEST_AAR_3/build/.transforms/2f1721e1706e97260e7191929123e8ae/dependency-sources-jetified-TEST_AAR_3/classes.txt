@@ -1,0 +1,3 @@
+com/jastec/test_dependency/BuildConfig.class
+com/jastec/test_dependency/MainActivity.class
+com/jastec/test_dependency/TestActivity.class
