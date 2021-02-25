@@ -80,4 +80,25 @@ public class DataGenerator {
         }
         return items;
     }
+
+    public static List<PgMenu> getPgMenuRe(Context ctx, List<MsPg> pg_all) {
+        List<PgMenu> items = new ArrayList<>();
+
+        // TypedArray drw_arr = ctx.getResources().obtainTypedArray(R.array.people_images);
+        String name_arr[] = ctx.getResources().getStringArray(R.array.program_names);
+
+            for (int i = 0; i < name_arr.length; i++) {
+                PgMenu obj = new PgMenu();
+                // obj.image = drw_arr.getResourceId(i, -1);
+                obj.pg_name = name_arr[i];
+                //  obj.email = Tools.getEmailFromName(obj.name);
+                // obj.imageDrw = ctx.getResources().getDrawable(obj.image);
+                items.add(obj);
+            }
+
+            //    Collections.shuffle(items);
+
+
+        return items;
+    }
 }

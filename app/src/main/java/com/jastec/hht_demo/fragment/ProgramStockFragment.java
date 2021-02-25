@@ -13,7 +13,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.jastec.hht_demo.R;
-import com.jastec.hht_demo.adapter.AdapterMenuleft;
+import com.jastec.hht_demo.adapter.ProgramAdapter;
 import com.jastec.hht_demo.data.DataGenerator;
 import com.jastec.hht_demo.model.MsPg;
 import com.jastec.hht_demo.model.PgMenu;
@@ -32,25 +32,16 @@ import io.reactivex.schedulers.Schedulers;
 
 import static com.jastec.hht_demo.remote.APIUtils.BASE_URL;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link ProgramStockFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
+
 public class ProgramStockFragment extends Fragment {
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
 
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
     private RecyclerView recyclerView;
-    private AdapterMenuleft adapter;
+    private ProgramAdapter adapter;
     private long mLastClickTime = 0;
-    List<MsPg> Program_ALl;
+    List<MsPg> ProgramAll;
     IMyAPI iMyAPI;
     CompositeDisposable compositeDisposable = new CompositeDisposable();
 
@@ -58,159 +49,86 @@ public class ProgramStockFragment extends Fragment {
         // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment ProgramFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static ProgramStockFragment newInstance(String param1, String param2) {
-        ProgramStockFragment fragment = new ProgramStockFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
-
         iMyAPI = RetrofitClient.getInstance(BASE_URL).create(IMyAPI.class);
-
-
-        // compositeDisposable.add(
-//                iMyAPI.GetPg()
-//                        .subscribeOn(Schedulers.io())
-//
-//                        .observeOn(AndroidSchedulers.mainThread())
-//                        .subscribe(new Consumer<List<MsPg>>() {
-//                            @Override
-//                            public void accept(List<MsPg> msPgs) throws Exception {
-//                                Program_ALl =msPgs;
-//                                for (int i = 0; i < Program_ALl.size(); i++) {
-//                                    //System.out.println(Program_ALl.get(i));
-//                                    Toast.makeText(getActivity(), Program_ALl.get(i).getPgId(), Toast.LENGTH_SHORT).show();
-//                                }
-//
-//
-//                            }
-//
-//                        }, new Consumer<Throwable>() {
-//                            @Override
-//                            public void accept(Throwable throwable) throws Exception {
-//                                // dialog.dismiss();
-//                                Toast.makeText(getActivity(), throwable.getMessage(), Toast.LENGTH_SHORT).show();
-//                            }
-//                        });
-        //  );
-
-
-//                iMyAPI.GetPg(new Callback<List<MsPg>>() {
-//                    @Override
-//                    public void onResponse(Call<List<MsPg>> call, Response<List<MsPg>> response) {
-//
-//                    }
-//
-//                    @Override
-//                    public void onFailure(Call<List<MsPg>> call, Throwable t) {
-//
-//                    }
-//                });
-
-
-//        iMyAPI.GetPg().enqueue(new Callback<List<MsPg>>() {
-//            @Override
-//            public void onResponse(Call<List<MsPg>> call, Response<List<MsPg>> response) {
-//
-//                    Program_ALl =response.body();
-//                        for (int i = 0; i < Program_ALl.size(); i++) {
-//                            //System.out.println(Program_ALl.get(i));
-//                            Toast.makeText(getActivity(), Program_ALl.get(i).getPgId(), Toast.LENGTH_SHORT).show();
-//
-//                }
-//            }
-//
-//            @Override
-//            public void onFailure(Call<List<MsPg>> call, Throwable t) {
-//                Toast.makeText(getActivity(), t.getMessage(), Toast.LENGTH_SHORT).show();
-//            }
-//        });
-
-        //compositeDisposable.dispose();
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_program, container, false);
+        initComponent(rootView, container);
         // Inflate the layout for this fragment
-        Observable<List<MsPg>> Program_Name_API = iMyAPI.GetPg();
-        compositeDisposable.add(Program_Name_API
-                .subscribeOn(Schedulers.io())
 
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Consumer<List<MsPg>>() {
-                    @Override
-                    public void accept(List<MsPg> msPgs) throws Exception {
-                        Program_ALl = msPgs;
-                        initComponent(rootView, container, Program_ALl);
-//                        for (int i = 0; i < Program_ALl.size(); i++) {
-//                            //System.out.println(Program_ALl.get(i));
-//                          //  Toast.makeText(getActivity(), Program_ALl.get(i).getPgId(), Toast.LENGTH_SHORT).show();
-//                        }
-                        compositeDisposable.dispose();
-
-                    }
-
-                }, new Consumer<Throwable>() {
-                    @Override
-                    public void accept(Throwable throwable) throws Exception {
-                        // dialog.dismiss();
-                        Toast.makeText(getActivity(), throwable.getMessage(), Toast.LENGTH_SHORT).show();
-                    //    compositeDisposable.dispose();
-                    }
-                }));
-//         initComponent(rootView,container,Program_ALl);
-        //   Toast.makeText(getActivity(),"Text!",Toast.LENGTH_SHORT).show();
         return rootView;
     }
 
-    private void initComponent(View rootView, ViewGroup container, List<MsPg> pg_all) {
+    private void initComponent(View rootView, ViewGroup container) {
 
         recyclerView = (RecyclerView) rootView.findViewById(R.id.Program_recyclerView);
-
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-
-        //set data and list adapter
-        adapter = new AdapterMenuleft(getActivity(), DataGenerator.getPgMenuDataStock(getActivity(), pg_all));
+        adapter = new ProgramAdapter(getActivity());
+        recyclerView.setHasFixedSize(true);
         recyclerView.setAdapter(adapter);
-        adapter.setOnItemClickListener(new AdapterMenuleft.OnItemClickListener() {
+        adapter.setOnItemClickListener(new ProgramAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(View view, PgMenu obj, int pos) {
-                if (SystemClock.elapsedRealtime() - mLastClickTime < 1000) {
-                    return;
-                }
-                mLastClickTime = SystemClock.elapsedRealtime();
-                Toast.makeText(getActivity(), obj.pg_name, Toast.LENGTH_SHORT).show();
-                Bundle bundle = new Bundle();
-                bundle.putString("formName", obj.pg_name.trim());
-                Intent intentBundle = new Intent(getActivity(), StockActivity.class);
-                intentBundle.putExtras(bundle);
-                startActivity(intentBundle);
-//                Toast.makeText(getActivity(), obj.pg_name, Toast.LENGTH_SHORT).show();
-//                Intent intent = new Intent(getActivity(), TestActivity.class);
-//                startActivity(intent);
+                OpenProgram(obj);
             }
         });
+        OnLoadData();
+
     }
+
+
+    private void OpenProgram(PgMenu obj) {
+        if (SystemClock.elapsedRealtime() - mLastClickTime < 1000) {
+            return;
+        }
+        mLastClickTime = SystemClock.elapsedRealtime();
+        Toast.makeText(getActivity(), obj.pg_name, Toast.LENGTH_SHORT).show();
+        Bundle bundle = new Bundle();
+        bundle.putString("formName", obj.pg_name.trim());
+        Intent intentBundle = new Intent(getActivity(), StockActivity.class);
+        intentBundle.putExtras(bundle);
+        startActivity(intentBundle);
+
+    }
+
+
+
+    private Observable<List<MsPg>> RxProgramAll(Observable<List<MsPg>> programAPI) {
+        return programAPI.subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread());
+    }
+
+
+    private void OnLoadData() {
+        RxProgramAll(iMyAPI.GetPg()).subscribe(responseProgram, errorResponseProgram);
+    }
+
+
+    private Consumer<List<MsPg>> responseProgram = new Consumer<List<MsPg>>() {
+        @Override
+        public void accept(List<MsPg> msPgs) throws Exception {
+            ProgramAll = msPgs;
+            adapter.setProgramAdapter(DataGenerator.getPgMenuDataStock(getActivity(), ProgramAll));
+            compositeDisposable.dispose();
+        }
+    };
+
+    private Consumer<Throwable> errorResponseProgram = new Consumer<Throwable>() {
+        @Override
+        public void accept(Throwable throwable) throws Exception {
+            // dialog.dismiss();
+            Toast.makeText(getActivity(), throwable.getMessage(), Toast.LENGTH_SHORT).show();
+            //    compositeDisposable.dispose();
+        }
+    };
+
+
 }
