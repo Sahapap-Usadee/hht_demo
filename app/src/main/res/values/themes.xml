@@ -28,7 +28,7 @@
     </style>
 
     <style name="RippleStyleBlack" parent="RippleStyleWhite">
-        <item name="mrl_rippleColor">#8096989A</item>
+        <item name="mrl_rippleColor">#8000000A</item>
     </style>
     <style name="RippleStyleDark" parent="RippleStyleWhite">
         <item name="mrl_rippleColor">#80000000</item>
